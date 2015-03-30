@@ -96,11 +96,11 @@ module.exports = {
      * @param  {String} actor_id [The id of the actor of the object you want to delete]
      * @param  {String} object [The type of object you want to delete]
      * @param  {String} object_id [The id of the object you want to delete]
+     * @param  {String} verb [The verb is the name of a valid activity type]
      * @return {HTML} 200, 404, 500 [200 OK if the deletion worked, 404 object is not found, and 500 if there was an error]
      */
     deleteSpecificObjectVerbedByActor: function(req, res) {
         var obj = {}, q;
-
         q = [
             'MATCH (a:' + req.param('actor') + ')-[v:' + req.param('verb') + ']->(o:' + req.param('object') + ')',
             'WHERE a.aid="' + req.param('actor_id') +'" AND o.aid="' + req.param('object_id') + '"',

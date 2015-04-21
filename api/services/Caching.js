@@ -16,22 +16,22 @@ var cacheConnected = false;
 */
 client.on('ready', function() {
     cacheConnected = true;
-    sails.log.debug('RedisClient::Events[ready]: [OK] Redis is up. Connections: ', client.connections);
+    Logger.log('RedisClient::Events[ready]: [OK] Redis is up. Connections: ', client.connections);
 });
 
 
 client.on('end', function() {
     cacheConnected = false;
-    sails.log.debug('RedisClient::Events[end]. Connected:', client.connected);
+    Logger.log('RedisClient::Events[end]. Connected:', client.connected);
 });
 
 
 client.on('error', function (err) {
     cacheConnected = false;
-    sails.log.error('RedisClient::Events[error]: ', err);
+    Logger.error('RedisClient::Events[error]: ', err);
     if (/ECONNREFUSED/g.test(err)) {
         client.retry_delay = 5000;
-        sails.log.error('Waiting 5s for redis client to come back online. Connections:', client.connections);
+        Logger.error('Waiting 5s for redis client to come back online. Connections:', client.connections);
     }
 });
 
@@ -59,7 +59,7 @@ module.exports = {
             /** Attempt to get the requested data and resolve the promise. */
             client.get(url, function(err, reply) {
                 if (err) {
-                    sails.log.error('Error from cache: ', err);
+                    Logger.error('Error from cache: ', err);
                     return reject(500);
                 }
                 if (reply) {

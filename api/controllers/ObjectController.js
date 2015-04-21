@@ -33,13 +33,16 @@ module.exports = {
             'RETURN object'
         ];
 
+        Logger.info('ObjectController: GET All objects of type: ', req.url, "Query: ", q.join('\n'));
+
         Activity.query(q, {}, function(err, results) {
             if (err) {
-                res.json(500, { error: 'INVALID REQUEST' });
+                return res.serverError({ error: 'INVALID REQUEST' }, err);
             }
+
             results = Pagination(req.query, results);
-            res.json(results);
-            Caching.write(req, results, 5);
+            res.ok(results);
+            return Caching.write(req, results, 5);
         });
     },
 
@@ -56,12 +59,15 @@ module.exports = {
             'RETURN object'
         ];
 
+        Logger.info('ObjectController: GET specific object: ', req.url, "Query: ", q.join('\n'));
+
         Activity.query(q, {}, function(err, results) {
             if (err) {
-                res.json(500, { error: 'INVALID REQUEST' });
+                return res.serverError({ error: 'INVALID REQUEST' }, err);
             }
-            res.json(results);
-            Caching.write(req, results, 4);
+
+            res.ok(results);
+            return Caching.write(req, results, 4);
         });
     },
 
@@ -79,12 +85,15 @@ module.exports = {
             'DELETE object, v'
         ];
 
+        Logger.info('ObjectController: DELETE Specific object: ', req.url, "Query: ", q.join('\n'));
+
         Activity.query(q, {}, function(err, results) {
             if (err) {
-                res.json(500, { error: 'INVALID REQUEST' });
+                return res.serverError({ error: 'INVALID REQUEST' }, err);
             }
-            res.json(results);
-            Caching.bust(req, []);
+
+            res.ok(results);
+            return Caching.bust(req, []);
         });
     },
 
@@ -103,9 +112,11 @@ module.exports = {
             'RETURN verbType as verb, count(actors) as totalItems, collect(activity) as items'
         ];
 
+        Logger.info('ObjectController: GET All activities by object: ', req.url, "Query: ", q.join('\n'));
+
         Activity.query(q, {}, function(err, results) {
             if (err) {
-                res.json(500, { error: 'INVALID REQUEST' });
+                return res.serverError({ error: 'INVALID REQUEST' }, err);
             }
 
             results.forEach(function(result) {
@@ -114,8 +125,8 @@ module.exports = {
                 }
             });
 
-            res.json(results);
-            Caching.write(req, results, 4);
+            res.ok(results);
+            return Caching.write(req, results, 4);
         });
     },
 
@@ -133,17 +144,19 @@ module.exports = {
             'RETURN count(actors) as totalItems, collect(activity) as items'
         ];
 
+        Logger.info('ObjectController: GET All actors whe verbed object: ', req.url, "Query: ", q.join('\n'));
+
         Activity.query(q, {}, function(err, results) {
             if (err) {
-                res.json(500, { error: 'INVALID REQUEST' });
+                return res.serverError({ error: 'INVALID REQUEST' }, err);
             }
 
             if (results.length && results[0].hasOwnProperty('items')) {
                 results[0].items = Pagination(req.query, results[0].items);
             }
 
-            res.json(results);
-            Caching.write(req, results, 3);
+            res.ok(results);
+            return Caching.write(req, results, 3);
         });
     },
 
@@ -161,17 +174,19 @@ module.exports = {
             'RETURN count(actors) as totalItems, collect(activity) as items'
         ];
 
+        Logger.info('ObjectController: GET Specific actor type who verbed object: ', req.url, "Query: ", q.join('\n'));
+
         Activity.query(q, {}, function(err, results) {
             if (err) {
-                res.json(500, { error: 'INVALID REQUEST' });
+                return res.serverError({ error: 'INVALID REQUEST' }, err);
             }
 
             if (results.length && results[0].hasOwnProperty('items')) {
                 results[0].items = Pagination(req.query, results[0].items);
             }
 
-            res.json(results);
-            Caching.write(req, results, 2);
+            res.ok(results);
+            return Caching.write(req, results, 2);
         });
     }
 };

@@ -10,5 +10,5 @@ module.exports = function(req, res, next) {
     if (Activity.sanitized(req.params) && Activity.sanitized(req.body)) {
         return next();
     }
-    return res.send(420, 'You didn\'t say the magic word!');
+    return res.enhanceCalm('You didn\'t say the magic word!', 'Sanitized policy: Parameters with cypher.');
 };

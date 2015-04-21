@@ -80,15 +80,16 @@ module.exports = {
             'RETURN actor'
         ];
 
+        Logger.info('ActorController: GET all actors of type: ', req.url, "Query: ", q.join('\n'));
+
         Activity.query(q, {}, function(err, results) {
             if (err) {
-                res.json(500, { error: 'INVALID REQUEST' });
+                return res.serverError({ error: 'INVALID REQUEST' }, err);
             }
 
             results = Pagination(req.query, results);
-
-            res.json(results);
-            Caching.write(req, results, 5);
+            res.ok(results);
+            return Caching.write(req, results, 5);
         });
 
     },
@@ -142,12 +143,15 @@ module.exports = {
             'RETURN actor'
         ];
 
+        Logger.info('ActorController: GET specific actor: ', req.url, "Query: ", q.join('\n'));
+
         Activity.query(q, {}, function(err, results) {
             if (err) {
-                res.json(500, { error: 'INVALID REQUEST' });
+                return res.serverError({ error: 'INVALID REQUEST' }, err);
             }
-            res.json(results);
-            Caching.write(req, results, 4);
+
+            res.ok(results);
+            return Caching.write(req, results, 4);
         });
     },
     /**
@@ -165,12 +169,15 @@ module.exports = {
             'DELETE actor, v'
         ];
 
+        Logger.info('ActorController: DELETE specific actor: ', req.url, "Query: ", q.join('\n'));
+
         Activity.query(q, {}, function(err, results) {
             if (err) {
-                res.json(500, { error: 'INVALID REQUEST' });
+                return res.serverError({ error: 'INVALID REQUEST' }, err);
             }
-            res.json(results);
-            Caching.bust(req, []);
+
+            res.ok(results);
+            return Caching.bust(req, []);
         });
     },
 
@@ -281,17 +288,19 @@ module.exports = {
             'RETURN count(objectCollection) as totalItems, collect(activity) as items'
         ];
 
+        Logger.info('ActorController: GET All objects verbed by actor: ', req.url, "Query: ", q.join('\n'));
+
         Activity.query(q, {}, function(err, results) {
             if (err) {
-                res.json(500, { error: 'INVALID REQUEST' });
+                return res.serverError({ error: 'INVALID REQUEST' }, err);
             }
 
             if (results.length && results[0].hasOwnProperty('items')) {
                 results[0].items = Pagination(req.query, results[0].items);
             }
 
-            res.json(results);
-            Caching.write(req, results, 3);
+            res.ok(results);
+            return Caching.write(req, results, 3);
         });
     },
 
@@ -306,17 +315,19 @@ module.exports = {
             'RETURN count(objectCollection) as totalItems, collect(activity) as items'
         ];
 
+        Logger.info('ActorController: GET Specific object type verbed by actor: ', req.url, "Query: ", q.join('\n'));
+
         Activity.query(q, {}, function(err, results) {
             if (err) {
-                res.json(500, { error: 'INVALID REQUEST' });
+                return res.serverError({ error: 'INVALID REQUEST' }, err);
             }
 
             if (results.length && results[0].hasOwnProperty('items')) {
                 results[0].items = Pagination(req.query, results[0].items);
             }
 
-            res.json(results);
-            Caching.write(req, results, 2);
+            res.ok(results);
+            return Caching.write(req, results, 2);
         });
     },
 
@@ -434,9 +445,11 @@ module.exports = {
             'RETURN verbType as verb, count(objectCollection) as totalItems, collect(activity) as items'
         ];
 
+        Logger.info('ActorController: GET All activities by actor: ', req.url, "Query: ", q.join('\n'));
+
         Activity.query(q, {}, function(err, results) {
             if (err) {
-                res.json(500, { error: 'INVALID REQUEST' });
+                return res.serverError({ error: 'INVALID REQUEST' }, err);
             }
 
             results.forEach(function(result) {
@@ -445,8 +458,8 @@ module.exports = {
                 }
             });
 
-            res.json(results);
-            Caching.write(req, results, 4);
+            res.ok(results);
+            return Caching.write(req, results, 4);
         });
     }
 };

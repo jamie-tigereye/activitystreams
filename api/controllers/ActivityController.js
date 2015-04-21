@@ -27,11 +27,15 @@ module.exports = {
             'WHERE HAS(verb.target_id) AND target.aid = verb.target_id',
             'RETURN actor,verb,object,target'
         ];
+
+        Logger.info("ActivityController: GET specific activity: ", req.url, "Query: ", q.join('\n'));
+
         Activity.query(q, {}, function(err, results) {
             if (err) {
-                return res.json(500, { error: 'INVALID REQUEST' });
+                return res.serverError({ error: 'INVALID REQUEST' }, err);
             }
-            res.json(results);
+
+            res.ok(results);
             return Caching.write(req, results, 1);
         });
     },
@@ -71,12 +75,15 @@ module.exports = {
             .concat(target_query)
             .concat(['RETURN actor, verb, object' + (target_query.length !== 0 ? ', target' : '')]);
 
+        Logger.info("ActivityController: POST specific activity: ", req.url, "Query: ", q.join('\n'));
+
         Activity.query(q, {}, function(err, results) {
             if (err) {
-                return res.json(500, { error: err, message: 'INVALID REQUEST'});
+                return res.serverError({ error: 'INVALID REQUEST'}, err);
             }
+
             Activity.publishCreate({ id: actor_id, data: results[0] });
-            res.json(results);
+            res.ok(results);
             return Caching.bust(req, results);
         });
     },
@@ -95,17 +102,20 @@ module.exports = {
             'RETURN actor, object'
         ];
 
+        Logger.info("ActivityController: DELETE specific activity: ", req.url, "Query: ", q.join('\n'));
+
         Activity.query(q, {}, function(err, results) {
                 if (err) {
-                    return res.json(500, {error: 'INVALID REQUEST'});
+                    return res.serverError({error: 'INVALID REQUEST'}, err);
                 }
                 if (!results.length) {
-                    return res.json(404, {error: 'NOT FOUND'});
+                    return res.notFound({error: 'NOT FOUND'}, 'Empty results');
                 }
+
                 results[0].verb = verb;
                 /** We need to update to sails 0.10.x to use publishDestroy instead of publishUpdate. */
                 Activity.publishUpdate(actor_id, {data: results[0]});
-                res.json(results);
+                res.ok(results);
                 return Caching.bust(req);
             }
         );

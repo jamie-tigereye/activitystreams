@@ -33,8 +33,6 @@ module.exports = {
             'RETURN object'
         ];
 
-        Logger.info('ObjectController: GET All objects of type: ', req.url, "Query: ", q.join('\n'));
-
         Activity.query(q, {}, function(err, results) {
             if (err) {
                 return res.serverError({ error: 'INVALID REQUEST' }, err);
@@ -58,8 +56,6 @@ module.exports = {
             'WHERE object.aid="' + req.param('object_id') + '"',
             'RETURN object'
         ];
-
-        Logger.info('ObjectController: GET specific object: ', req.url, "Query: ", q.join('\n'));
 
         Activity.query(q, {}, function(err, results) {
             if (err) {
@@ -85,8 +81,6 @@ module.exports = {
             'DELETE object, v'
         ];
 
-        Logger.info('ObjectController: DELETE Specific object: ', req.url, "Query: ", q.join('\n'));
-
         Activity.query(q, {}, function(err, results) {
             if (err) {
                 return res.serverError({ error: 'INVALID REQUEST' }, err);
@@ -111,8 +105,6 @@ module.exports = {
             'WITH type(verb) as verbType, count(actor) as actors, { actor: actor, verb: verb, object: object } as activity',
             'RETURN verbType as verb, count(actors) as totalItems, collect(activity) as items'
         ];
-
-        Logger.info('ObjectController: GET All activities by object: ', req.url, "Query: ", q.join('\n'));
 
         Activity.query(q, {}, function(err, results) {
             if (err) {
@@ -144,8 +136,6 @@ module.exports = {
             'RETURN count(actors) as totalItems, collect(activity) as items'
         ];
 
-        Logger.info('ObjectController: GET All actors whe verbed object: ', req.url, "Query: ", q.join('\n'));
-
         Activity.query(q, {}, function(err, results) {
             if (err) {
                 return res.serverError({ error: 'INVALID REQUEST' }, err);
@@ -173,8 +163,6 @@ module.exports = {
             'WITH count(actor) as actors, { actor: actor, verb: verb, object: object } as activity',
             'RETURN count(actors) as totalItems, collect(activity) as items'
         ];
-
-        Logger.info('ObjectController: GET Specific actor type who verbed object: ', req.url, "Query: ", q.join('\n'));
 
         Activity.query(q, {}, function(err, results) {
             if (err) {

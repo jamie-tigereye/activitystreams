@@ -80,8 +80,6 @@ module.exports = {
             'RETURN actor'
         ];
 
-        Logger.info('ActorController: GET all actors of type: ', req.url, "Query: ", q.join('\n'));
-
         Activity.query(q, {}, function(err, results) {
             if (err) {
                 return res.serverError({ error: 'INVALID REQUEST' }, err);
@@ -143,8 +141,6 @@ module.exports = {
             'RETURN actor'
         ];
 
-        Logger.info('ActorController: GET specific actor: ', req.url, "Query: ", q.join('\n'));
-
         Activity.query(q, {}, function(err, results) {
             if (err) {
                 return res.serverError({ error: 'INVALID REQUEST' }, err);
@@ -168,8 +164,6 @@ module.exports = {
             'OPTIONAL MATCH (actor:' + req.param('actor') + ')-[v]-()',
             'DELETE actor, v'
         ];
-
-        Logger.info('ActorController: DELETE specific actor: ', req.url, "Query: ", q.join('\n'));
 
         Activity.query(q, {}, function(err, results) {
             if (err) {
@@ -288,8 +282,6 @@ module.exports = {
             'RETURN count(objectCollection) as totalItems, collect(activity) as items'
         ];
 
-        Logger.info('ActorController: GET All objects verbed by actor: ', req.url, "Query: ", q.join('\n'));
-
         Activity.query(q, {}, function(err, results) {
             if (err) {
                 return res.serverError({ error: 'INVALID REQUEST' }, err);
@@ -314,8 +306,6 @@ module.exports = {
             'WITH collect(object) as objectCollection, { actor: actor, verb: verb, object: object, target: target } as activity',
             'RETURN count(objectCollection) as totalItems, collect(activity) as items'
         ];
-
-        Logger.info('ActorController: GET Specific object type verbed by actor: ', req.url, "Query: ", q.join('\n'));
 
         Activity.query(q, {}, function(err, results) {
             if (err) {
@@ -444,8 +434,6 @@ module.exports = {
             'WITH type(verb) as verbType, collect(object) as objectCollection, { actor: actor, verb: verb, object: object, target: target } as activity',
             'RETURN verbType as verb, count(objectCollection) as totalItems, collect(activity) as items'
         ];
-
-        Logger.info('ActorController: GET All activities by actor: ', req.url, "Query: ", q.join('\n'));
 
         Activity.query(q, {}, function(err, results) {
             if (err) {

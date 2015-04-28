@@ -11,6 +11,7 @@
  * return res.forbidden('Access denied.');
  * ```
  */
+var util = require('util');
 
 module.exports = function forbidden (data, err) {
 
@@ -18,15 +19,17 @@ module.exports = function forbidden (data, err) {
     var req = this.req;
     var res = this.res;
     var sails = req._sails;
+    var d = new Date();
+    var response = util.format('[%s] %s %s - %s %s %d - ', d.toLocaleString(), req.options.controller, req.options.action, req.method, req.url, 403);
 
     // Set status code
     res.status(403);
 
     // Log error to console
     if (err !== undefined) {
-      Logger.log('Sending 403 ("Forbidden") response: \n', JSON.stringify(err));
+      Logger.error(response, err);
     }
-    else Logger.log('Sending 403 ("Forbidden") response');
+    else Logger.error(response);
 
     res.json(data);
 };

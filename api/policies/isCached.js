@@ -7,7 +7,7 @@ module.exports = function(req, res, next) {
         function(reply) {
             reply = JSON.parse(reply);
 
-            Logger.log('Reply from cache: ', JSON.stringify(reply));
+            sails.log.info('Reply from cache: ', JSON.stringify(reply));
 
             if (!req.isSocket && req.get('if-none-match') && reply.etag && req.get('if-none-match') === reply.etag) {
                 return res.send(304);
@@ -24,11 +24,11 @@ module.exports = function(req, res, next) {
                     break;
 
                 case 404 :
-                    Logger.log('Cache not found.');
+                    sails.log.info('Cache not found.');
                     break;
 
                 case 200 :
-                    Logger.log('Not caching.');
+                    sails.log.info('Not caching.');
                     break;
             };
 

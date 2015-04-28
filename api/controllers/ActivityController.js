@@ -28,8 +28,6 @@ module.exports = {
             'RETURN actor,verb,object,target'
         ];
 
-        Logger.info("ActivityController: GET specific activity: ", req.url, "Query: ", q.join('\n'));
-
         Activity.query(q, {}, function(err, results) {
             if (err) {
                 return res.serverError({ error: 'INVALID REQUEST' }, err);
@@ -75,8 +73,6 @@ module.exports = {
             .concat(target_query)
             .concat(['RETURN actor, verb, object' + (target_query.length !== 0 ? ', target' : '')]);
 
-        Logger.info("ActivityController: POST specific activity: ", req.url, "Query: ", q.join('\n'));
-
         Activity.query(q, {}, function(err, results) {
             if (err) {
                 return res.serverError({ error: 'INVALID REQUEST'}, err);
@@ -102,14 +98,12 @@ module.exports = {
             'RETURN actor, object'
         ];
 
-        Logger.info("ActivityController: DELETE specific activity: ", req.url, "Query: ", q.join('\n'));
-
         Activity.query(q, {}, function(err, results) {
                 if (err) {
                     return res.serverError({error: 'INVALID REQUEST'}, err);
                 }
                 if (!results.length) {
-                    return res.notFound({error: 'NOT FOUND'}, 'Empty results');
+                    return res.notFound({error: 'NOT FOUND'}, 'ERROR: Activity not found');
                 }
 
                 results[0].verb = verb;

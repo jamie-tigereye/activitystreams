@@ -11,6 +11,7 @@
  * error is encountered, Sails will call `res.serverError()`
  * automatically.
  */
+var util = require('util');
 
 module.exports = function serverError (data, err) {
 
@@ -18,15 +19,17 @@ module.exports = function serverError (data, err) {
     var req = this.req;
     var res = this.res;
     var sails = req._sails;
+    var d = new Date();
+    var response = util.format('[%s] %s %s - %s %s %d - ', d.toLocaleString(), req.options.controller, req.options.action, req.method, req.url, 500);
 
     // Set status code
     res.status(500);
 
     // Log error to console
     if (err !== undefined) {
-      Logger.error('Sending 500 ("Server Error") err: \n', JSON.stringify(err));
+      Logger.error(response, err);
     }
-    else Logger.error('Sending empty 500 ("Server Error")');
+    else Logger.error(response);
 
     res.json(data);
 };

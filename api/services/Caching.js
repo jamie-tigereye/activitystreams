@@ -16,13 +16,13 @@ var cacheConnected = false;
 */
 client.on('ready', function() {
     cacheConnected = true;
-    Logger.log('RedisClient::Events[ready]: [OK] Redis is up. Connections: ', client.connections);
+    sails.log('RedisClient::Events[ready]: [OK] Redis is up. Connections: ', client.connections);
 });
 
 
 client.on('end', function() {
     cacheConnected = false;
-    Logger.log('RedisClient::Events[end]. Connected:', client.connected);
+    sails.log('RedisClient::Events[end]. Connected:', client.connected);
 });
 
 

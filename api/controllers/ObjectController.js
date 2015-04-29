@@ -35,11 +35,12 @@ module.exports = {
 
         Activity.query(q, {}, function(err, results) {
             if (err) {
-                res.json(500, { error: 'INVALID REQUEST' });
+                return res.serverError({ error: 'INVALID REQUEST' }, err);
             }
+
             results = Pagination(req.query, results);
-            res.json(results);
-            Caching.write(req, results, 5);
+            res.ok(results);
+            return Caching.write(req, results, 5);
         });
     },
 
@@ -58,10 +59,11 @@ module.exports = {
 
         Activity.query(q, {}, function(err, results) {
             if (err) {
-                res.json(500, { error: 'INVALID REQUEST' });
+                return res.serverError({ error: 'INVALID REQUEST' }, err);
             }
-            res.json(results);
-            Caching.write(req, results, 4);
+
+            res.ok(results);
+            return Caching.write(req, results, 4);
         });
     },
 
@@ -81,10 +83,11 @@ module.exports = {
 
         Activity.query(q, {}, function(err, results) {
             if (err) {
-                res.json(500, { error: 'INVALID REQUEST' });
+                return res.serverError({ error: 'INVALID REQUEST' }, err);
             }
-            res.json(results);
-            Caching.bust(req, []);
+
+            res.ok(results);
+            return Caching.bust(req, []);
         });
     },
 
@@ -105,7 +108,7 @@ module.exports = {
 
         Activity.query(q, {}, function(err, results) {
             if (err) {
-                res.json(500, { error: 'INVALID REQUEST' });
+                return res.serverError({ error: 'INVALID REQUEST' }, err);
             }
 
             results.forEach(function(result) {
@@ -114,8 +117,8 @@ module.exports = {
                 }
             });
 
-            res.json(results);
-            Caching.write(req, results, 4);
+            res.ok(results);
+            return Caching.write(req, results, 4);
         });
     },
 
@@ -135,15 +138,15 @@ module.exports = {
 
         Activity.query(q, {}, function(err, results) {
             if (err) {
-                res.json(500, { error: 'INVALID REQUEST' });
+                return res.serverError({ error: 'INVALID REQUEST' }, err);
             }
 
             if (results.length && results[0].hasOwnProperty('items')) {
                 results[0].items = Pagination(req.query, results[0].items);
             }
 
-            res.json(results);
-            Caching.write(req, results, 3);
+            res.ok(results);
+            return Caching.write(req, results, 3);
         });
     },
 
@@ -163,15 +166,15 @@ module.exports = {
 
         Activity.query(q, {}, function(err, results) {
             if (err) {
-                res.json(500, { error: 'INVALID REQUEST' });
+                return res.serverError({ error: 'INVALID REQUEST' }, err);
             }
 
             if (results.length && results[0].hasOwnProperty('items')) {
                 results[0].items = Pagination(req.query, results[0].items);
             }
 
-            res.json(results);
-            Caching.write(req, results, 2);
+            res.ok(results);
+            return Caching.write(req, results, 2);
         });
     }
 };

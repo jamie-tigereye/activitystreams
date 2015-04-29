@@ -1,6 +1,6 @@
 var SysLogger = require('ain2');
 
-customLogger = new SysLogger({tag: sails.config.tagSyslog, facility:'local3'});
+customLogger = new SysLogger({tag: (sails.config.tagSyslog) ? sails.config.tagSyslog : 'HORIZON', facility:'local3'});
 
 customLogger.setMessageComposer(function(message, severity){
     sails.log.error(message.replace(/\r?\n/g,' '));

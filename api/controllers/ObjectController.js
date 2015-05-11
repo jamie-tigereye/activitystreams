@@ -114,14 +114,13 @@ module.exports = {
 
         Activity.query(q, {}, function(err, results) {
             if (err) {
-                return res.json(500, { error: 'INVALID REQUEST' });
+                return res.serverError({ error: 'INVALID REQUEST' }, err);
             }
             if (typeof results[0]["affected_actors"] === 'object') {
-                return res.json(404, {error: 'NOT FOUND'});
+                return res.notFound({error: 'NOT FOUND'}, 'Object not found');
             }
             results = Caching._generateDataFromReq(req);
-            res.json(results);
-            RabbitMQ.publish({data: results, verb: 'destroyed'});
+            res.ok(results);
              /** Delete actor and verb for cache busting. */
             delete results[0].actor;
             delete results[0].verb;

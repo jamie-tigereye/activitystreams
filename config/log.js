@@ -20,8 +20,9 @@ module.exports = {
   // 'info'	: Display calls from `.error()`, `.warn()`, `.debug()` to `.info()`
   // 'verbose': Display calls from `.error()`, `.warn()`, `.debug()`, `.info()` to `.verbose()`
   //
+
   log: {
-    level: 'info'
+    level: (process.env.NODE_ENV == 'production') ? 'warn' : 'info'
   }
 
 };

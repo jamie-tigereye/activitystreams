@@ -3,7 +3,6 @@
 
 var redis = require('redis'),
     sails = require('sails'),
-    crc32 = require('buffer-crc32'),
     Promise = require('es6-promise').Promise,
     crypto = require('crypto');
 
@@ -17,22 +16,22 @@ var cacheConnected = false;
 */
 client.on('ready', function() {
     cacheConnected = true;
-    sails.log.debug('RedisClient::Events[ready]: [OK] Redis is up. Connections: ', client.connections);
+    sails.log('RedisClient::Events[ready]: [OK] Redis is up. Connections: ', client.connections);
 });
 
 
 client.on('end', function() {
     cacheConnected = false;
-    sails.log.debug('RedisClient::Events[end]. Connected:', client.connected);
+    sails.log('RedisClient::Events[end]. Connected:', client.connected);
 });
 
 
 client.on('error', function (err) {
     cacheConnected = false;
-    sails.log.error('RedisClient::Events[error]: ', err);
+    Logger.error('RedisClient::Events[error]: ', err);
     if (/ECONNREFUSED/g.test(err)) {
         client.retry_delay = 5000;
-        sails.log.error('Waiting 5s for redis client to come back online. Connections:', client.connections);
+        Logger.error('Waiting 5s for redis client to come back online. Connections:', client.connections);
     }
 });
 
@@ -60,7 +59,7 @@ module.exports = {
             /** Attempt to get the requested data and resolve the promise. */
             client.get(url, function(err, reply) {
                 if (err) {
-                    sails.log.error('Error from cache: ', err);
+                    Logger.error('Error from cache: ', err);
                     return reject(500);
                 }
                 if (reply) {
@@ -381,7 +380,7 @@ module.exports = {
 
         /**
          * If the data is an empty array, e.g. the activity controller found
-         * no matching activities, then create data rfom the request.
+         * no matching activities, then create data from the request.
          */
         if (!data.length) return this._generateDataFromReq(req);
 

@@ -1,6 +1,6 @@
 {
   "name": "activitystreams",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Activity Streams App",
   "dependencies": {
     "ain2": "~1.5.0",

@@ -20,7 +20,7 @@ module.exports = function serverError (data, err) {
     var res = this.res;
     var sails = req._sails;
     var d = new Date();
-    var response = util.format('[%s] %s %s - %s %s %d - ', d.toLocaleString(), req.options.controller, req.options.action, req.method, req.url, 500);
+    var response = util.format('[%s] - %s %s %d - ', d.toLocaleString(), req.method, req.url, 500);
 
     // Set status code
     res.status(500);
